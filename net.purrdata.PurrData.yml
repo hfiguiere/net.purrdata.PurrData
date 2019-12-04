@@ -15,6 +15,7 @@ finish-args: [
     '--device=all'
 ]
 modules:
+- "shared-modules/lua5.3/lua-5.3.5.json"
 - name: purr-data
   buildsystem: autotools
   subdir: pd/src
@@ -36,14 +37,14 @@ modules:
   subdir: externals
   build-commands:
   - |
-    make -j ${FLATPAK_BUILDER_N_JOBS} prefix=/app \
+    make -j ${FLATPAK_BUILDER_N_JOBS} LUA_LIBS="-L/app/lib -llua" prefix=/app \
          adaptive arraysize autotune bassemu boids comport creb cxc cyclone earplug ekext ext13 fftease \
          flatgui freeverb ggee hcs iem_ambi iem_bin_ambi iemlib iemguts iem_adaptfilt iemmatrix \
          iemxmlrpc iem_delay iem_roomsim iem_spec2 iem_tab jasch_lib loaders-libdir lyonpotpourri mapping \
-         markex maxlib mjlib moonlib motex mrpeach pan pdcontainer pddp pdogg plugin pmpd \
+         markex maxlib mjlib moonlib motex mrpeach pan pdcontainer pddp pdlua pdogg plugin pmpd \
          rjlib sigpack smlib tof unauthorized vbap windowing
   - |
-    make -j ${FLATPAK_BUILDER_N_JOBS} DESTDIR=/ prefix=/app \
+    make -j ${FLATPAK_BUILDER_N_JOBS} DESTDIR=/ LUA_LIBS="-L/app/lib -llua" prefix=/app \
          adaptive_install arraysize_install autotune_install bassemu_install \
          boids_install comport_install creb_install cxc_install cyclone_install \
          earplug_install ekext_install ext13_install fftease_install \
@@ -54,7 +55,7 @@ modules:
          jasch_lib_install loaders-libdir_install lyonpotpourri_install \
          mapping_install markex_install maxlib_install mjlib_install \
          moonlib_install motex_install mrpeach_install \
-         pan_install pdcontainer_install pddp_install pdogg_install \
+         pan_install pdcontainer_install pddp_install pdlua_install pdogg_install \
          plugin_install pmpd_install rjlib_install sigpack_install smlib_install \
          tof_install unauthorized_install vbap_install windowing_install
   # The following externals from the purr-data repo are not built:
@@ -65,7 +66,6 @@ modules:
   #   iemgui -- requires a config.h that it doesn't have
   #   moocow -- fails to configure
   #   oscx -- fails to configure
-  #   pdlua -- requires Lua
   #   zexy -- fails to configure
   sources:
   - type: git
