@@ -105,6 +105,8 @@ modules:
   # add mime type to .pd files
   - install -d /app/share/mime/packages/
   - install -m 644 packages/linux_make/pd-l2ork.xml /app/share/mime/packages/net.purrdata.PurrData.xml
+  # Default settings (mostly needed to set up the PD library search paths).
+  - install -m 644 default.settings /app/lib/pd-l2ork
   sources:
   - type: git
     url: https://github.com/agraef/purr-data/
@@ -125,6 +127,8 @@ modules:
     path: net.purrdata.PurrData.metainfo.xml
   - type: file
     path: net.purrdata.PurrData.svg
+  - type: file
+    path: default.settings
 
 cleanup:
   - /include/*
