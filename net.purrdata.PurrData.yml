@@ -125,3 +125,10 @@ modules:
     path: net.purrdata.PurrData.metainfo.xml
   - type: file
     path: net.purrdata.PurrData.svg
+
+cleanup:
+  - /include/*
+  - /lib/pd-l2ork/Makefile.am
+  - /lib/pd-l2ork/README.txt
+  - /lib/pd-l2ork/bin/todo.txt
+  - /lib/pd-l2ork/bin/nw/credits.html
