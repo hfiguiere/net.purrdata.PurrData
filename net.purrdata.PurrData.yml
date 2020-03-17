@@ -19,14 +19,12 @@ modules:
 - name: purr-data
   buildsystem: autotools
   subdir: pd/src
-  config-opts: [ '--disable-portaudio', '--enable-alsa', '--enable-oss' ]
+  config-opts: [ '--disable-portaudio', '--enable-alsa', '--enable-oss', '--enable-jack' ]
   sources:
   - type: git
     url: https://github.com/agraef/purr-data/
-    tag: 2.10.0
-    commit: 7cf93e5e32009f033430b8bc9c7276adb272853c
-  - type: patch
-    path: patch/build-api.patch
+    tag: 2.10.1
+    commit: 501d8b2beca759c432233343808408d64ace7090
   - type: patch
     path: patch/gnu-make-parallel.patch
   - type: patch
@@ -70,8 +68,8 @@ modules:
   sources:
   - type: git
     url: https://github.com/agraef/purr-data/
-    tag: 2.10.0
-    commit: 7cf93e5e32009f033430b8bc9c7276adb272853c
+    tag: 2.10.1
+    commit: 501d8b2beca759c432233343808408d64ace7090
 
 - name: pd-abstractions
   buildsystem: simple
@@ -81,8 +79,8 @@ modules:
   sources:
   - type: git
     url: https://github.com/agraef/purr-data/
-    tag: 2.10.0
-    commit: 7cf93e5e32009f033430b8bc9c7276adb272853c
+    tag: 2.10.1
+    commit: 501d8b2beca759c432233343808408d64ace7090
 
 - name: purr-data-integration
   buildsystem: simple
@@ -92,16 +90,16 @@ modules:
   - mkdir -p /app/lib/pd-l2ork/bin/nw
   - tar -x -f nwjs.tar.gz -C /app/lib/pd-l2ork/bin/nw --strip-components=1
   # wrapper script
-  - install -m 755 pd-wrapper.sh /app/bin
+  - install -m 755 packages/linux_flatpak/pd-wrapper.sh /app/bin
   # .desktop file (so we appear in list of applications)
   - install -d /app/share/applications/
-  - install -m 644 net.purrdata.PurrData.desktop /app/share/applications/
+  - install -m 644 packages/linux_flatpak/net.purrdata.PurrData.desktop /app/share/applications/
   # AppStream metadata (for app store / package manager)
   - install -d /app/share/metainfo/
   - install -m 644 net.purrdata.PurrData.metainfo.xml /app/share/metainfo
   # icon (for everyone)
   - install -d /app/share/icons/hicolor/scalable/apps
-  - install -m 644 net.purrdata.PurrData.svg /app/share/icons/hicolor/scalable/apps/
+  - install -m 644 packages/linux_flatpak/net.purrdata.PurrData.svg /app/share/icons/hicolor/scalable/apps/
   # add mime type to .pd files
   - install -d /app/share/mime/packages/
   - install -m 644 packages/linux_make/pd-l2ork.xml /app/share/mime/packages/net.purrdata.PurrData.xml
@@ -110,8 +108,8 @@ modules:
   sources:
   - type: git
     url: https://github.com/agraef/purr-data/
-    tag: 2.10.0
-    commit: 7cf93e5e32009f033430b8bc9c7276adb272853c
+    tag: 2.10.1
+    commit: 501d8b2beca759c432233343808408d64ace7090
   - type: file
     # Using an binary x86_64 build of nw.js makes me sad. There are ARM packages
     # available from the nw.js website. For other platforms, it's difficult but
@@ -119,14 +117,11 @@ modules:
     url: https://dl.nwjs.io/v0.42.3/nwjs-v0.42.3-linux-x64.tar.gz
     sha256: 4802a3a32767ff8908aef8e91e11d81e7b515b32a09c9ab82c09edf91e49d99e
     dest-filename: nwjs.tar.gz
-  - type: file
-    path: ./pd-wrapper.sh
-  - type: file
-    path: net.purrdata.PurrData.desktop
+    # FIXME: there is an upstream version of this file but the maintainers don't update
+    # the <releases> section. We need to autogenerate this section somehow, see
+    # https://blog.tenstral.net/2020/03/maintain-release-info-easily-in-metainfo-files.html
   - type: file
     path: net.purrdata.PurrData.metainfo.xml
-  - type: file
-    path: net.purrdata.PurrData.svg
   - type: file
     path: default.settings
 
