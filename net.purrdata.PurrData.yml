@@ -16,10 +16,36 @@ finish-args: [
 ]
 modules:
 - "shared-modules/lua5.3/lua-5.3.5.json"
+
+- name: jack
+  buildsystem: simple
+  build-commands:
+  - |
+    ./waf configure --prefix=/app
+    ./waf build
+    ./waf install
+  sources:
+  - type: git
+    url: https://github.com/jackaudio/jack2
+    tag: v1.9.14
+    commit: b54a09bf7ef760d81fdb8544ad10e45575394624
+
+- name: pipewire
+  buildsystem: meson
+  config-opts: ['-Dalsa=false', '-Dbluez5=false', '-Dexamples=false',
+                '-Devl=false', '-Dgstreamer=false', '-Djack=false', '-Dman=false',
+                '-Dpipewire-alsa=false', '-Dpipewire-pulseaudio=false',
+                '-Dsystemd=false', '-Dv4l2=false', '-Dvideoconvert=false', '-Dvulkan=false']
+  sources:
+  - type: git
+    url: https://gitlab.freedesktop.org/pipewire/pipewire
+    tag: 0.3.1
+    commit: 74a1632f0720886d5b3b6c23ee8fcd6c03ca7aac
+
 - name: purr-data
   buildsystem: autotools
   subdir: pd/src
-  config-opts: [ '--disable-portaudio', '--enable-alsa', '--enable-oss', '--enable-jack' ]
+  config-opts: [ '--disable-portaudio', '--enable-alsa', '--enable-oss', '--enable-pipewire-jack' ]
   sources:
   - type: git
     url: https://github.com/agraef/purr-data/
@@ -29,6 +55,8 @@ modules:
     path: patch/gnu-make-parallel.patch
   - type: patch
     path: patch/no-rsync-during-install.patch
+  - type: patch
+    path: patch/pipewire-jack.patch
 
 - name: pd-externals
   buildsystem: simple
