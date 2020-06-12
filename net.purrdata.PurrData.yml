@@ -27,6 +27,9 @@ add-extensions:
 
 modules:
 - "shared-modules/lua5.3/lua-5.3.5.json"
+# (optional) For fluidsynth
+- "shared-modules/linux-audio/ladspa.json"
+- "fluidsynth.json"
 - name: purr-data
   buildsystem: autotools
   subdir: pd/src
@@ -52,12 +55,13 @@ modules:
          iemxmlrpc iem_delay iem_roomsim iem_spec2 iem_tab jasch_lib loaders-libdir lyonpotpourri mapping \
          markex maxlib mjlib moonlib motex mrpeach pan pdcontainer pddp pdlua pdogg plugin pmpd \
          rjlib sigpack smlib tof unauthorized vbap windowing
+  - make -j ${FLATPAK_BUILDER_N_JOBS} LDFLAGS=-L/app/lib prefix=/app fluid
   - |
     make -j ${FLATPAK_BUILDER_N_JOBS} DESTDIR=/ LUA_LIBS="-L/app/lib -llua" prefix=/app \
          adaptive_install arraysize_install autotune_install bassemu_install \
          boids_install comport_install creb_install cxc_install cyclone_install \
          earplug_install ekext_install ext13_install fftease_install \
-         flatgui_install freeverb_install ggee_install hcs_install \
+         flatgui_install fluid_install freeverb_install ggee_install hcs_install \
          iem_ambi_install iem_bin_ambi_install iemlib_install \
          iemguts_install iem_adaptfilt_install iemmatrix_install iemxmlrpc_install \
          iem_delay_install iem_roomsim_install iem_spec2_install iem_tab_install \
@@ -71,7 +75,6 @@ modules:
   #
   #   bsaylor  -- needs fftw
   #   dsis -- segfault during configure !?
-  #   fluid - requires fluidsynth
   #   iemgui -- requires a config.h that it doesn't have
   #   moocow -- fails to configure
   #   oscx -- fails to configure
