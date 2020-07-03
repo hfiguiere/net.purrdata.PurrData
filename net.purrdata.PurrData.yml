@@ -14,9 +14,16 @@ finish-args: [
     # MIDI access (Flatpak doesn't yet support exposing only MIDI devices)
     '--device=all',
     # Linux Audio plugins
-    '--env=LADSPA_PATH=/app/extensions/LadspaPlugins/ladspa'
+    '--env=LADSPA_PATH=/app/extensions/Plugins/ladspa:/app/extensions/LadspaPlugins/ladspa'
 ]
 add-extensions:
+  org.freedesktop.LinuxAudio.Plugins:
+    directory: extensions/Plugins
+    version: '19.08'
+    add-ld-path: lib
+    merge-dirs: ladspa
+    subdirectories: true
+    no-autodownload": true
   org.freedesktop.LinuxAudio.LadspaPlugins:
     directory: extensions/LadspaPlugins
     version: '19.08'
@@ -120,6 +127,7 @@ modules:
   # Default settings (mostly needed to set up the PD library search paths).
   - install -m 644 default.settings /app/lib/pd-l2ork
   # Audio Plugins
+  - install -d /app/extensions/Plugins
   - install -d /app/extensions/LadspaPlugins
   sources:
   - type: git
